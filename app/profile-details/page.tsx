@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import PhoneOutline from "../components/PhoneOutline";
 import { useLinkContext } from '../context/LinkContext';
 import Image from "next/image";
+import { FloppyDiskBack } from "phosphor-react";
 
 const ProfileDetails = () => {
   const { profile, setProfile } = useLinkContext();
@@ -64,9 +65,9 @@ const ProfileDetails = () => {
     });
 
     setErrorMessage("");
-    setSuccessMessage("Profile updated successfully!");
+    setSuccessMessage("Your changes have been successfully saved!");
 
-    setTimeout(() => setSuccessMessage(""), 3000); // Hide success message after 3 seconds
+    setTimeout(() => setSuccessMessage(""), 5000);
   };
 
   return (
@@ -187,7 +188,7 @@ const ProfileDetails = () => {
           </div>
         </div>
         {successMessage && (
-          <div className=" text-center p-3" style={{ backgroundColor: '#d4edda', color: '#155724' }}>
+          <div className=" text-center p-2 mb-5 mx-auto w-50" style={{ backgroundColor: '#333', color: '#FAFAFA', borderRadius: '12px' }}> <FloppyDiskBack size={24}/>
             {successMessage}
           </div>
         )}

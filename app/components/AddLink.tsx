@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { linkOptions } from "../../linkOptions";
 
@@ -36,7 +34,7 @@ const AddLink: React.FC<AddLinkProps> = ({ index, link, setPendingLinks }) => {
       >
         {linkOptions.map((option) => (
           <option key={option.platform} value={option.platform}>
-            {option.platform}
+            {option.logo} {option.platform}
           </option>
         ))}
       </select>
@@ -52,7 +50,7 @@ const AddLink: React.FC<AddLinkProps> = ({ index, link, setPendingLinks }) => {
             )
           )
         }
-        placeholder="Enter URL"
+        placeholder="e.g. https://www.github.com/johnappleseed"
       />
       {(!link.platform || !link.url) && (
         <p className="text-danger">Platform and URL cannot be empty</p>

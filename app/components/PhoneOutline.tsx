@@ -1,9 +1,8 @@
-"use client";
-
 import React from 'react';
 import { useLinkContext } from '../context/LinkContext';
 import { linkOptions } from '../../linkOptions';
-import styles from './PhoneOutline.module.css'
+import styles from './PhoneOutline.module.css';
+import { ArrowRight } from "phosphor-react";
 
 const PhoneOutline = () => {
   const { links, profile } = useLinkContext();
@@ -25,20 +24,24 @@ const PhoneOutline = () => {
         {links.length < 1 && (<div className="bg-light p-3"></div>)}
         {links.length < 1 && (<div className="bg-light p-3 my-3"></div>)}
         {links.length < 1 && (<div className="bg-light p-3"></div>)}
-        {links.map((link, index) => (
-          <div className="">
+        {links.map((link, index) => {
+          const option = linkOptions.find(option => option.platform === link.platform);
+          return (
             <a
-            key={index}
-            href={link.url}
-            target='_blank'
-            className={`btn btn-block form-control mb-2 text-white`}
-            style={{ backgroundColor: linkOptions.find(option => option.platform === link.platform)?.color }}
-          >
-            {link.platform}
-          </a>
-          </div>
-          
-        ))}
+              key={index}
+              href={link.url}
+              target='_blank'
+              className={`btn btn-block form-control p-3 mb-2 text-white d-flex align-items-center justify-content-between`}
+              style={{ backgroundColor: option?.color }}
+            >
+              <div className="d-flex align-items-center">
+                {option?.logo}
+                <span className="ml-2">{link.platform}</span>
+              </div>
+              <ArrowRight color='white' size={16} />
+            </a>
+          );
+        })}
       </div>
     </div>
   );
