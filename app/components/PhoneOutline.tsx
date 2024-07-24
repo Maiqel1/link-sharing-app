@@ -4,7 +4,6 @@ import React from 'react';
 import { useLinkContext } from '../context/LinkContext';
 import { linkOptions } from '../../linkOptions';
 import styles from './PhoneOutline.module.css'
-import { ArrowArcRight } from 'phosphor-react';
 
 const PhoneOutline = () => {
   const { links, profile } = useLinkContext();
