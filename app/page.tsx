@@ -1,95 +1,116 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { auth } from "../firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "./context/AuthContext";
+import { useEffect, useState } from "react";
+import { Envelope, Lock } from "phosphor-react";
+import styles from './(auth)/create-account/create-account.module.css';
+
+
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Home() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      router.push("/dashboard");
+    } catch (error) {
+      setErrorMessage("Failed to login. Please check your credentials.");
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/dashboard");
+    }
+  }, [user, router]);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div>
+      <div className="d-block d-md-none">
+        <Image src="/images/logo.png" alt="" width={184} height={40} />
+      </div>
+      <div className="d-flex flex-column justify-content-center align-items-center p-2 p-md-5">
+        <Image src="/images/logo.png" className="my-4 d-none d-md-block" alt="" width={184} height={40} />
+        <div className="p-1 p-md-5 mt-5 mt-md-0 d-block d-md-none">
+          <h2>Login</h2>
+          <p>Add your details below to get back into the app</p>
+          <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column justify-content-center">
+          <div className=" d-flex flex-column mb-3">
+              <div className=""><label htmlFor="">Email address</label></div>
+             <div className="d-flex input-group">
+              <span className={`input-group-text ${styles.icon}`}><Envelope height={16} width={16} /></span>
+              <input type="text" placeholder="e.g. alex@email.com" style={{borderLeft :"0" }} className="form-control" {...register("email")} />
+            </div>
+            </div>
+            {errors.email && <p className="text-danger">{errors.email.message}</p>}
+            
+            <div className=" d-flex flex-column mb-3">
+              <div className=""><label htmlFor="">Password</label></div>
+             <div className="d-flex input-group">
+              <span className={`input-group-text ${styles.icon}`}><Lock  height={16} width={16} /></span>
+              <input type="password" placeholder="Enter your password" style={{borderLeft :"0" }} className="form-control" {...register("password")} />
+            </div>
+            </div>
+            {errors.password && <p className="text-danger">{errors.password.message}</p>}
+            
+            <button className="p-2 text-white form-control mt-3" style={{ backgroundColor: "#633CFF" }}>
+              Log in
+            </button>
+            {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
+          </form>
+          <p className="text-center mt-3">Don’t have an account? <Link href="/create-account" style={{ textDecoration: "none" }}><span style={{ color: "#633CFF" }}>Sign up</span></Link></p>
+        </div>
+
+        <div className="d-none d-md-block p-1 p-md-5 mt-5 mt-md-0 bg-white">
+          <h2>Login</h2>
+          <p>Add your details below to get back into the app</p>
+          <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column justify-content-center">
+          <div className=" d-flex flex-column mb-3">
+              <div className=""><label htmlFor="">Email address</label></div>
+             <div className="d-flex input-group">
+              <span className={`input-group-text ${styles.icon}`}><Envelope /></span>
+              <input type="text" placeholder="e.g. alex@email.com" style={{borderLeft :"0" }} className="form-control" {...register("email")} />
+              </div>
+              </div>
+            {errors.email && <p className="text-danger">{errors.email.message}</p>}
+            
+            <div className=" d-flex flex-column mb-3">
+              <div className=""><label htmlFor="">Password</label></div>
+             <div className="d-flex input-group">
+               <span className={`input-group-text ${styles.icon}`}><Lock /></span>
+              <input type="password" placeholder="Enter your password" style={{borderLeft :"0" }} className="form-control" {...register("password")} />
+            </div>
+             </div>
+            {errors.password && <p className="text-danger">{errors.password.message}</p>}
+            
+            <button className="p-2 text-white form-control mt-3" style={{ backgroundColor: "#633CFF" }}>
+              Log in
+            </button>
+            {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
+          </form>
+          <p className="text-center mt-3">Don’t have an account? <Link href="/create-account" style={{ textDecoration: "none" }}><span style={{ color: "#633CFF" }}>Sign up</span></Link></p>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
   );
 }

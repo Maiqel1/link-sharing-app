@@ -1,0 +1,27 @@
+.active {
+  background-color: #efebff;
+  margin-right: 50px;
+  border-radius: 8px;
+}
+
+.activeLink {
+  color: #633cff;
+  padding: 11px 27px;
+}
+
+.navBack {
+  padding: 11px 27px;
+}
+
+.previewDiv {
+  color: #633cff;
+  padding: 11px 27px;
+  height: 46px;
+  border-radius: 8px;
+  border: 1px solid #633cff;
+}
+
+.previewDiv:hover {
+  background-color: #efebff;
+  cursor: pointer;
+}

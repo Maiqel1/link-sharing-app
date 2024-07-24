@@ -1,0 +1,9 @@
+.createAccountBox {
+  border-radius: 12px;
+  width: 500px;
+}
+
+.icon {
+  background-color: white !important;
+  border-right: 0 !important;
+}

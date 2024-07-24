@@ -1,0 +1,52 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topHalf {
+  background-color: #6c63ff;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.bottomHalf {
+  background-color: FAFAFA;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.phoneOutline {
+  background-color: white;
+  border-radius: 24px;
+  height: 500px;
+  width: 307px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.imgPlaceholder {
+  height: 100px;
+  width: 100px;
+  background-color: #eeeeee;
+  border-radius: 120%;
+}
+
+.textPlaceholder {
+  background-color: #eeeeee;
+  padding: 5px;
+}

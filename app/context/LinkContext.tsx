@@ -1,0 +1,179 @@
+"use client";
+
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { db, auth } from '../../firebaseConfig';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+
+interface Link {
+  id?: string;
+  platform: string;
+  url: string;
+}
+
+interface Profile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  profilePicture: string;
+}
+
+interface LinkContextProps {
+  links: Link[];
+  profile: Profile;
+  addLink: (link: Link) => void;
+  removeLink: (id: string) => void;
+  updateLink: (link: Link) => void;
+  setProfile: (profile: Profile) => void;
+  user: any;
+  signUp: (email: string, password: string) => void;
+  signIn: (email: string, password: string) => void;
+  signOutUser: () => void;
+  fullname?: string
+}
+
+const LinkContext = createContext<LinkContextProps | undefined>(undefined);
+
+export const LinkProvider = ({ children }: { children: ReactNode }) => {
+  const [links, setLinks] = useState<Link[]>([]);
+  const [profile, setProfile] = useState<Profile>({ firstName: '', lastName: '', email: '', profilePicture: '' });
+  const [user, setUser] = useState<any>(null);
+  const [fullname, setFullname] = useState()
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        fetchUserData(user.uid);
+      } else {
+        setUser(null);
+        setLinks([]);
+        setProfile({ firstName: '', lastName: '', email: '', profilePicture: '' });
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const fetchUserData = async (uid: string) => {
+    try {
+      const userDoc = await getDoc(doc(db, 'users', uid));
+      console.log("Fetching user data from:", `users/${uid}`);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setLinks(userData.links || []);
+        setProfile(userData.profile || { firstName: '', lastName: '', email: '', profilePicture: '' });
+      } else {
+        console.log("No user document found");
+      }
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+  };
+  
+
+  const addLink = async (link: Link) => {
+    const newLinks = [...links, link];
+    setLinks(newLinks);
+    
+    if (user) {
+      try {
+        const userDocRef = doc(db, 'users', user.uid);
+        const docSnapshot = await getDoc(userDocRef);
+        if (docSnapshot.exists()) {
+          await updateDoc(userDocRef, { links: newLinks });
+        } else {
+          await setDoc(userDocRef, { links: newLinks });
+        }
+      } catch (error) {
+        console.error("Error adding link: ", error);
+      }
+    }
+  };
+  
+
+  const removeLink = async (id: string) => {
+    const newLinks = links.filter(link => link.id !== id);
+    setLinks(newLinks);
+    if (user) {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), { links: newLinks });
+      } catch (error) {
+        console.error("Error removing link: ", error);
+      }
+    }
+  };
+
+  const updateLink = async (updatedLink: Link) => {
+    const newLinks = links.map(link => (link.platform === updatedLink.platform ? updatedLink : link));
+    setLinks(newLinks);
+    if (user) {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), { links: newLinks });
+      } catch (error) {
+        console.error("Error updating link: ", error);
+      }
+    }
+  };  
+
+  const setProfileData = async (profile: Profile) => {
+    setProfile(profile);
+    if (user) {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), { profile });
+      } catch (error) {
+        console.error("Error setting profile data: ", error);
+      }
+    }
+  };
+
+const signUp = async (email: string, password: string) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Create initial document
+    await setDoc(doc(db, 'users', user.uid), {
+      links: [],
+      profile: {
+        firstName: '',
+        lastName: '',
+        email: email,
+        profilePicture: ''
+      }
+    });
+  } catch (error) {
+    console.error("Error signing up: ", error);
+  }
+};
+
+  const signIn = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error("Error signing in: ", error);
+    }
+  };
+
+  const signOutUser = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
+  return (
+    <LinkContext.Provider value={{ links, profile, fullname, addLink, removeLink, updateLink, setProfile: setProfileData, user, signUp, signIn, signOutUser }}>
+      {children}
+    </LinkContext.Provider>
+  );
+};
+
+export const useLinkContext = () => {
+  const context = useContext(LinkContext);
+  if (context === undefined) {
+    throw new Error('useLinkContext must be used within a LinkProvider');
+  }
+  return context;
+};

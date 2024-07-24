@@ -1,0 +1,20 @@
+.phoneOutline {
+  background-image: url("../../public/images/img6.png");
+  height: 500px;
+  width: 307px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.imgPlaceholder {
+  height: 100px;
+  width: 100px;
+  background-color: #eeeeee;
+  border-radius: 120%;
+}
+
+.textPlaceholder {
+  background-color: #eeeeee;
+  padding: 5px;
+}
