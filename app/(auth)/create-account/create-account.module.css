@@ -2,6 +2,7 @@
   background-color: white;
   border-radius: 12px;
   width: 500px;
+  overflow-x: hidden !important;
 }
 
 .icon {
