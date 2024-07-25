@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
@@ -37,6 +37,8 @@ const Dashboard = () => {
       console.error("Error saving links:", error);
     }
   };
+
+  const hasEmptyFields = pendingLinks.some(link => !link.platform || !link.url);
 
   return (
     <>
@@ -103,37 +105,37 @@ const Dashboard = () => {
             <div className='bg-white p-3'>
               <hr />
               <div className="d-none d-md-block">
-              <div className='d-flex justify-content-end'>
-                <button
-                  onClick={handleSaveLinks}
-                  disabled={pendingLinks.length < 1}
-                  style={{
-                    backgroundColor:
-                      pendingLinks.length < 1 ? "#EFEBFF" : "#633CFF",
-                    cursor: pendingLinks.length < 1 ? "not-allowed" : "pointer",
-                  }}
-                  className='btn p-2 text-white'
-                >
-                  Save
-                </button>
-              </div>
+                <div className='d-flex justify-content-end'>
+                  <button
+                    onClick={handleSaveLinks}
+                    disabled={pendingLinks.length < 1 || hasEmptyFields}
+                    style={{
+                      backgroundColor:
+                        pendingLinks.length < 1 || hasEmptyFields ? "#EFEBFF" : "#633CFF",
+                      cursor: pendingLinks.length < 1 || hasEmptyFields ? "not-allowed" : "pointer",
+                    }}
+                    className='btn p-2 text-white'
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
 
               <div className="d-block d-md-none">
-              <div className='d-flex justify-content-end'>
-                <button
-                  onClick={handleSaveLinks}
-                  disabled={pendingLinks.length < 1}
-                  style={{
-                    backgroundColor:
-                      pendingLinks.length < 1 ? "#EFEBFF" : "#633CFF",
-                    cursor: pendingLinks.length < 1 ? "not-allowed" : "pointer",
-                  }}
-                  className='btn form-control p-2 text-white'
-                >
-                  Save
-                </button>
-              </div>
+                <div className='d-flex justify-content-end'>
+                  <button
+                    onClick={handleSaveLinks}
+                    disabled={pendingLinks.length < 1 || hasEmptyFields}
+                    style={{
+                      backgroundColor:
+                        pendingLinks.length < 1 || hasEmptyFields ? "#EFEBFF" : "#633CFF",
+                      cursor: pendingLinks.length < 1 || hasEmptyFields ? "not-allowed" : "pointer",
+                    }}
+                    className='btn form-control p-2 text-white'
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           </div>
