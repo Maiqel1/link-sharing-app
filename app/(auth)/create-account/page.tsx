@@ -52,7 +52,7 @@ const CreateAccount = () => {
           <h2>Create account</h2>
           <p>Let’s get you started sharing your links!</p>
           <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column justify-content-center">
-          <div className=" d-flex flex-column ">
+          <div className=" d-flex flex-column my-0 my-md-2 ">
               <div className=""><label htmlFor="">Email address</label></div>
              <div className="d-flex input-group">
               <span className={`input-group-text ${styles.icon}`}><Envelope height={16} width={16} /></span>
@@ -62,7 +62,7 @@ const CreateAccount = () => {
             
             {errors.email && <p className="text-danger">{errors.email.message}</p>}
             
-            <div className=" d-flex flex-column mt-3">
+            <div className=" d-flex flex-column my-0 my-md-2">
               <div className=""><label htmlFor="">Password</label></div>
              <div className="d-flex input-group">
               <span className={`input-group-text ${styles.icon}`}><Lock height={16} width={16} /></span>
@@ -71,7 +71,7 @@ const CreateAccount = () => {
             </div>
             {errors.password && <p className="text-danger">{errors.password.message}</p>}
             
-            <div className=" d-flex flex-column mt-3">
+            <div className=" d-flex flex-column my-0 my-md-2">
               <div className=""><label htmlFor="">Confirm password</label></div>
              <div className="d-flex input-group">
               <span className={`input-group-text ${styles.icon}`}><Lock height={16} width={16} /></span>
