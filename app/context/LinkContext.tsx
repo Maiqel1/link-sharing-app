@@ -58,7 +58,6 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
   const fetchUserData = async (uid: string) => {
     try {
       const userDoc = await getDoc(doc(db, 'users', uid));
-      console.log("Fetching user data from:", `users/${uid}`);
       if (userDoc.exists()) {
         const userData = userDoc.data();
         setLinks(userData.links || []);
@@ -132,7 +131,6 @@ const signUp = async (email: string, password: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Create initial document
     await setDoc(doc(db, 'users', user.uid), {
       links: [],
       profile: {

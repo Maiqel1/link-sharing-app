@@ -18,7 +18,7 @@ const AddLink: React.FC<AddLinkProps> = ({ index, link, setPendingLinks }) => {
     <div className="bg-light mb-2 p-3">
       <div className="d-flex justify-content-between">
         <p>{`link #${index + 1}`}</p>
-        <p onClick={handleRemoveLink}>remove</p>
+        <p onClick={handleRemoveLink} style={{cursor :"pointer"}}>remove</p>
       </div>
       <label htmlFor="">Platform</label>
       <select

@@ -14,7 +14,7 @@ const Navbar = () => {
         <Image src='/images/logo.png' className='img-fluid' alt='Logo' width={184} height={40} />
       </div>
       <div className='d-block d-md-none'>
-        <Image src='/images/logosm.png' className='me-3' alt='Logo' width={32} height={32} />
+        <Image src='/images/logosm.png' className='me-3 mt-2' alt='Logo' width={32} height={32} />
       </div>
       <div className='d-flex me-md-5'>
         <div className={`${pathname === '/dashboard' ? styles.active : styles.navBack} pt-2  me-md-0`}>
@@ -40,7 +40,7 @@ const Navbar = () => {
           </NextLink>
         </div>
       </div>
-      <div className={`${styles.previewDiv} pt-2`}>
+      <div className={`${styles.previewDiv} mt-1 pt-2`}>
         <NextLink href='/preview' style={{ textDecoration: 'none' }} passHref>
           <Eye size={16} className='d-block d-md-none mt-1' />
           <span className='d-none d-md-inline ms-2'>Preview</span>
