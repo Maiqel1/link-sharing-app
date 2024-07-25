@@ -48,7 +48,7 @@ const CreateAccount = () => {
         <Image src="/images/logo.png" className="my-4 d-none d-md-block" alt="" width={184} height={40} />
         
       
-        <div className={`${styles.createAccountBox} p-5 mt-0 mt-md-5 mx-auto`}>  
+        <div className={`${styles.createAccountBox} p-5 mt-0 mt-md-5 mx-2`}>  
           <h2>Create account</h2>
           <p>Let’s get you started sharing your links!</p>
           <form onSubmit={handleSubmit(onSubmit)} className="d-flex flex-column justify-content-center">
