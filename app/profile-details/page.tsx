@@ -142,6 +142,7 @@ const ProfileDetails = () => {
 
                 <div className='d-flex justify-content-between'>
                   <label htmlFor=''>Email</label>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <input
                     type='text'
                     value={profileEmail}
