@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLinkContext } from '../context/LinkContext';
 import { linkOptions } from '../../linkOptions';
 import styles from './PhoneOutline.module.css';
 import { ArrowRight } from "phosphor-react";
 
 const PhoneOutline = () => {
-  const { links, profile } = useLinkContext();
+  const { links, profile, updateLink } = useLinkContext();
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editedUrl, setEditedUrl] = useState<string>('');
+
+  const handleEdit = (index: number) => {
+    setEditIndex(index);
+    setEditedUrl(links[index].url); 
+  };
+
+  const handleChangeUrl = (newUrl: string) => {
+    setEditedUrl(newUrl); 
+  };
+
+  const handleSaveEdit = async () => {
+    if (editIndex !== null && editedUrl.trim() !== '') {
+      const updatedLink = { ...links[editIndex], url: editedUrl };
+      await updateLink(updatedLink);
+      setEditIndex(null); 
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditIndex(null); 
+  };
 
   return (
     <div className={`${styles.phoneOutline} d-flex flex-column`}>
@@ -27,19 +50,43 @@ const PhoneOutline = () => {
         {links.map((link, index) => {
           const option = linkOptions.find(option => option.platform === link.platform);
           return (
-            <a
-              key={index}
-              href={link.url}
-              target='_blank'
-              className={`btn btn-block form-control p-3 mb-2 text-white d-flex align-items-center justify-content-between`}
-              style={{ backgroundColor: option?.color }}
-            >
-              <div className="d-flex align-items-center">
-                {option?.logo}
-                <span className="ml-2">{link.platform}</span>
-              </div>
-              <ArrowRight color='white' size={16} />
-            </a>
+            <div key={index} className="mb-2">
+              {editIndex === index ? (
+                <>
+                  <input
+                    type="text"
+                    className="form-control mb-2"
+                    value={editedUrl}
+                    onChange={(e) => handleChangeUrl(e.target.value)}
+                  />
+                  <button
+                    className="btn me-2"
+                    onClick={handleSaveEdit}
+                    style={{backgroundColor: "#633CFF",}}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button
+                  className={`btn btn-block form-control p-3 text-white d-flex align-items-center justify-content-between`}
+                  style={{ backgroundColor: option?.color }}
+                  onClick={() => handleEdit(index)}
+                >
+                  <div className="d-flex align-items-center">
+                    {option?.logo}
+                    <span className="ml-2">{link.platform}</span>
+                  </div>
+                  <ArrowRight color='white' size={16} />
+                </button>
+              )}
+            </div>
           );
         })}
       </div>
