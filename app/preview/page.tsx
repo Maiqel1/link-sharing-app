@@ -6,6 +6,7 @@ import styles from "./Preview.module.css";
 import { linkOptions } from "../../linkOptions";
 import Link from "next/link";
 import { ArrowRight, Spinner } from "phosphor-react";
+import Image from "next/image";
 
 const Preview = () => {
   const { links, profile } = useLinkContext();
@@ -58,13 +59,16 @@ const Preview = () => {
             <div className={`${styles.phoneOutline} d-flex flex-column mt-5 `}>
               <div className={`${styles.imgPlaceholder} mx-auto mt-5`}>
                 {profile.profilePicture ? (
-                  <img
+                  <Image
                     src={profile.profilePicture}
-                    className="img-fluid rounded-circle mb-1"
+                    className="img-fluid mb-1"
                     alt="Profile"
+                    objectFit="contain"
+                    height={100}
+                    width={100}
                   />
                 ) : (
-                  <div className={styles.imgPlaceholderText}>Profile Image</div>
+                  <div className={styles.imgPlaceholder}>Profile Image</div>
                 )}
               </div>
               <section className="text-center px-5 mt-2">
