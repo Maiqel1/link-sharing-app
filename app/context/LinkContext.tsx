@@ -4,33 +4,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { db, auth } from '../../firebaseConfig';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-
-interface Link {
-  id?: string;
-  platform: string;
-  url: string;
-}
-
-interface Profile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  profilePicture: string;
-}
-
-interface LinkContextProps {
-  links: Link[];
-  profile: Profile;
-  addLink: (link: Link) => void;
-  removeLink: (id: string) => void;
-  updateLink: (link: Link) => void;
-  setProfile: (profile: Profile) => void;
-  user: any;
-  signUp: (email: string, password: string) => void;
-  signIn: (email: string, password: string) => void;
-  signOutUser: () => void;
-  fullname?: string
-}
+import { nanoid } from 'nanoid';
+import { Link, Profile, UserData, LinkContextProps } from '../types';
 
 const LinkContext = createContext<LinkContextProps | undefined>(undefined);
 
@@ -39,6 +14,8 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile>({ firstName: '', lastName: '', email: '', profilePicture: '' });
   const [user, setUser] = useState<any>(null);
   const [fullname, setFullname] = useState()
+  const [shareableLink, setShareableLink] = useState<string | null>(null);
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -103,6 +80,27 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const generateShareableLink = async (): Promise<string> => {
+    if (user) {
+      const linkId = nanoid(10);
+      const shareableLink = `${window.location.origin}/share/${linkId}`;
+      
+      try {
+        await setDoc(doc(db, 'shareableLinks', linkId), {
+          userId: user.uid,
+          createdAt: new Date()
+        });
+        
+        setShareableLink(shareableLink);
+        return shareableLink;
+      } catch (error) {
+        console.error("Error generating shareable link: ", error);
+        throw error;
+      }
+    }
+    throw new Error("User not authenticated");
+  };
+
   const updateLink = async (updatedLink: Link) => {
     const newLinks = links.map(link => (link.platform === updatedLink.platform ? updatedLink : link));
     setLinks(newLinks);
@@ -162,7 +160,8 @@ const signUp = async (email: string, password: string) => {
   };
 
   return (
-    <LinkContext.Provider value={{ links, profile, fullname, addLink, removeLink, updateLink, setProfile: setProfileData, user, signUp, signIn, signOutUser }}>
+    <LinkContext.Provider value={{ links, profile, addLink, removeLink, updateLink, shareableLink,
+      generateShareableLink, setProfile: setProfileData, user, signUp, signIn, signOutUser }}>
       {children}
     </LinkContext.Provider>
   );
