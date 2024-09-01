@@ -1,26 +1,29 @@
-
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLinkContext } from '../context/LinkContext';
 
 const ShareButton = () => {
-  const { generateShareableLink, shareableLink } = useLinkContext();
+  const { generateShareableLink } = useLinkContext();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleShare = async () => {
     setIsLoading(true);
     try {
       const link = await generateShareableLink();
-      // You can now display this link to the user or copy it to clipboard
-      console.log("Shareable link:", link);
+      await navigator.clipboard.writeText(link);
+      alert('Link copied to clipboard!');
+      router.push(link);
     } catch (error) {
       console.error("Error generating link:", error);
+      alert('Error generating link. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <button onClick={handleShare} disabled={isLoading}  className="btn text-white"
+    <button onClick={handleShare} disabled={isLoading} className="btn text-white"
     style={{
       backgroundColor: "#633cff",
       textDecoration: "none",
@@ -31,4 +34,4 @@ const ShareButton = () => {
   );
 };
 
-export default ShareButton
+export default ShareButton;
