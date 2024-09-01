@@ -41,11 +41,15 @@ export const LinkProvider = ({ children }: { children: ReactNode }) => {
         setProfile(userData.profile || { firstName: '', lastName: '', email: '', profilePicture: '' });
       } else {
         console.log("No user document found");
+  console.log(profile);
+
       }
     } catch (error) {
       console.error("Error fetching user data: ", error);
     }
   };
+
+  console.log(profile);
   
 
   const addLink = async (link: Link) => {

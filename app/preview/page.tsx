@@ -26,6 +26,7 @@ const Preview: React.FC<PreviewProps> = ({ links, profile, isSharedView = false 
 
     if (Array.isArray(linksToUse) || Object.keys(profileToUse).length > 0) {
       setLoading(false);
+      console.log(profile)
     }
   }, [links, profile, contextLinks, contextProfile]);
 
@@ -67,9 +68,9 @@ const Preview: React.FC<PreviewProps> = ({ links, profile, isSharedView = false 
           <div className={`${styles.content} mt-0 mt-md-5`}>
             <div className={`${styles.phoneOutline} d-flex flex-column mt-5 `}>
               <div className={`${styles.imgPlaceholder} mx-auto mt-5`}>
-                {profile?.profilePicture ? (
+                {profileToRender?.profilePicture ? (
                   <Image
-                    src={profile.profilePicture}
+                    src={profileToRender.profilePicture}
                     className="img-fluid rounded-circle mb-1"
                     alt="Profile"
                     objectFit="contain"
@@ -83,17 +84,17 @@ const Preview: React.FC<PreviewProps> = ({ links, profile, isSharedView = false 
               <section className="text-center px-5 mt-2">
                 <p
                   className={
-                    profile?.firstName ? "p-2  mt-2" : styles.textPlaceholder
+                    profileToRender?.firstName ? "p-2  mt-2" : styles.textPlaceholder
                   }
                 >
-                  {profile?.firstName} {profile?.lastName}
+                  {profileToRender?.firstName} {profileToRender?.lastName}
                 </p>
                 <p
                   className={
-                    profile?.email ? "p-2 mt-1" : styles.textPlaceholder
+                    profileToRender?.email ? "p-2 mt-1" : styles.textPlaceholder
                   }
                 >
-                  {profile?.email}
+                  {profileToRender?.email}
                 </p>
               </section>
               <div className="p-2 d-flex flex-column">
