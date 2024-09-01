@@ -70,7 +70,7 @@ const Preview: React.FC<PreviewProps> = ({ links, profile, isSharedView = false 
                 {profile?.profilePicture ? (
                   <Image
                     src={profile.profilePicture}
-                    className="img-fluid mb-1"
+                    className="img-fluid rounded-circle mb-1"
                     alt="Profile"
                     objectFit="contain"
                     height={100}
