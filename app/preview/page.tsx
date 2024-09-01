@@ -16,7 +16,7 @@ interface PreviewProps {
   isSharedView?: boolean;
 }
 
-const Preview: React.FC<PreviewProps> = ({ links, profile, isSharedView = false }) => {
+const Preview: React.FC<Partial<PreviewProps>> = ({ links, profile, isSharedView = false }) => {
   const [loading, setLoading] = useState(true);
   const { links: contextLinks, profile: contextProfile, user } = useLinkContext();
 
