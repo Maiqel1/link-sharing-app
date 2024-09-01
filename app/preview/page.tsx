@@ -16,7 +16,7 @@ interface PreviewProps {
   isSharedView?: boolean;
 }
 
-const Preview: React.FC<Partial<PreviewProps>> = ({ links, profile, isSharedView = false }) => {
+const Preview: React.FC<any> = ({ links, profile, isSharedView = false }) => {
   const [loading, setLoading] = useState(true);
   const { links: contextLinks, profile: contextProfile, user } = useLinkContext();
 
@@ -99,7 +99,7 @@ const Preview: React.FC<Partial<PreviewProps>> = ({ links, profile, isSharedView
               </section>
               <div className="p-2 d-flex flex-column">
         {(!linksToRender || linksToRender.length === 0) && <div className="bg-light p-3">No links added yet</div>}
-        {linksToRender && linksToRender.map((link, index) => {
+        {linksToRender && linksToRender.map((link : any, index : any) => {
           const option = linkOptions.find(
             (option) => option.platform === link.platform
           );
